@@ -1,5 +1,11 @@
-# custom files
-custom/
+# custom files - ignore server-dependent configs
+custom/env.zsh
+custom/aliases.zsh
+
+# custom directory structure that should be tracked
+!custom/
+!custom/themes/
+!custom/functions.zsh
 
 # temp files directories
 cache/
