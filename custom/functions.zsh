@@ -102,3 +102,33 @@ add_to_pythonpath() {
         export PYTHONPATH="$PYTHONPATH:$path"
     fi
 }
+
+install_dotfiles() {
+    local dotfiles_dir="$HOME/.oh-my-zsh/custom/dotfiles"
+    
+    if [[ ! -d "$dotfiles_dir" ]]; then
+        echo "No dotfiles directory found at $dotfiles_dir"
+        return 1
+    fi
+    
+    echo "Installing dotfiles from $dotfiles_dir..."
+    
+    for file in "$dotfiles_dir"/.* "$dotfiles_dir"/*; do
+        # Skip . and .. directories
+        [[ "$(basename "$file")" == "." || "$(basename "$file")" == ".." ]] && continue
+        [[ ! -e "$file" ]] && continue
+        
+        local filename="$(basename "$file")"
+        local target="$HOME/$filename"
+        
+        if [[ -e "$target" ]]; then
+            echo "  $filename already exists, backing up to ${filename}.backup"
+            mv "$target" "${target}.backup"
+        fi
+        
+        echo "  Installing $filename"
+        cp "$file" "$target"
+    done
+    
+    echo "Done! Dotfiles installed."
+}

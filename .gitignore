@@ -6,6 +6,9 @@ custom/aliases.zsh
 !custom/
 !custom/themes/
 !custom/functions.zsh
+!custom/dotfiles/
+!custom/install.sh
+!custom/README.md
 
 # temp files directories
 cache/
