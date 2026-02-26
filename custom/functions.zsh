@@ -67,7 +67,7 @@ add_to_pythonpath() {
     local path
 
     if [[ -z "$input" ]]; then
-        echo "Usage: add_to_pythonpath <path> [--permanent]"
+        echo "Usage: add_to_pythonpath <path> [--permanent|p]"
         return 1
     fi
 
@@ -79,25 +79,28 @@ add_to_pythonpath() {
         return 1
     fi
 
-    # Check if already in PYTHONPATH
-    if [[ ":$PYTHONPATH:" == *":$path:"* ]]; then
-        echo "$path is already in PYTHONPATH"
-        return 0
-    fi
-
-    if [[ "$mode" == "--permanent" ]]; then
+    if [[ "$mode" == "--permanent" || "$mode" == "p" ]]; then
         echo "Adding $path to PYTHONPATH permanently..."
 
         mkdir -p "$(dirname "$env_file")"
         touch "$env_file"
 
-        if ! grep -Fq "$path" "$env_file"; then
+        if grep -Fq "$path" "$env_file"; then
+            echo "$path is already in permanent PYTHONPATH (in $env_file)"
+            return 0
+        else
             echo "export PYTHONPATH=\"\$PYTHONPATH:$path\"" >> "$env_file"
         fi
 
         echo "Done! Restart your terminal or run:"
         echo "  source $env_file"
     else
+        # Check only current shell PYTHONPATH for non-permanent mode
+        if [[ ":$PYTHONPATH:" == *":$path:"* ]]; then
+            echo "$path is already in PYTHONPATH for this shell"
+            return 0
+        fi
+
         echo "Adding $path to this shell session..."
         export PYTHONPATH="$PYTHONPATH:$path"
     fi
