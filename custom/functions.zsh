@@ -132,3 +132,29 @@ install_dotfiles() {
     
     echo "Done! Dotfiles installed."
 }
+
+
+
+start-ssh-agent() {
+  sshfile=~/.ssh-agent-environment
+
+  if [ -n "$SSH_AUTH_SOCK" ]; then
+    ssh-add -l &>/dev/null
+    if [[ $? != 2 ]]; then
+      return 0
+    fi
+  fi
+
+  if [ -e "$sshfile" ]; then
+    . $sshfile &>/dev/null
+    ssh-add -l &>/dev/null
+    if [[ $? != 2 ]]; then
+      return 0
+    fi
+  fi
+
+  echo "Creating new SSH agent."
+  ssh-agent -s > $sshfile && . $sshfile
+}
+
+start-ssh-agent &>/dev/null
