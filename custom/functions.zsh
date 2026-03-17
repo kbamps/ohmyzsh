@@ -161,3 +161,9 @@ start-ssh-agent() {
 }
 
 start-ssh-agent &>/dev/null
+
+
+
+apptainer-builder() {
+  ssh micsm01 "conda run -n apptainer_builder apptainer-builder $*"
+}
