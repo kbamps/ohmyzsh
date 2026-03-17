@@ -164,5 +164,5 @@ start-ssh-agent &>/dev/null
 
 
 apptainer-builder() {
-  ssh micsm01 "cd $PWD && conda run -n apptainer_builder apptainer-builder $*"
+  ssh micsm01 "cd $PWD && conda run --no-capture-output -n apptainer_builder apptainer-builder $*"
 }
