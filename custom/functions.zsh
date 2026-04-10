@@ -166,3 +166,15 @@ start-ssh-agent &>/dev/null
 apptainer-builder() {
   ssh micsm01 "cd $PWD && conda run --no-capture-output -n apptainer_builder apptainer-builder $*"
 }
+
+
+download() {
+  if [[ $# -eq 1 ]]; then
+    rsync -avz --progress "$1" micmbp33:~/Downloads/
+  elif [[ $# -eq 2 ]]; then
+    rsync -avz --progress "$1" "$2"
+  else
+    echo "Usage: download <local_path> [remote_path]"
+    return 1
+  fi
+}
